@@ -12,6 +12,8 @@ export const Route = createFileRoute("/studio")({
       { name: "description", content: "Colour illustrations in your browser with fill, pencil, marker, spray and more." },
       { property: "og:title", content: "Colour Studio — Melineaire" },
       { property: "og:description", content: "A calm, working colouring studio." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Studio,
