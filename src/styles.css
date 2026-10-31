@@ -54,6 +54,8 @@
   --color-lilac: var(--lilac);
   --color-sakura: var(--sakura);
   --color-sky: var(--sky);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-hero-shade: var(--hero-shade);
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
   --color-sidebar: var(--sidebar);
@@ -67,7 +69,7 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
   --background: oklch(0.982 0.012 85);
   --foreground: oklch(0.27 0.04 275);
   --card: oklch(0.995 0.006 85);
@@ -90,6 +92,8 @@
   --lilac: oklch(0.72 0.09 300);
   --sakura: oklch(0.84 0.07 355);
   --sky: oklch(0.72 0.09 245);
+  --hero-foreground: oklch(0.99 0.008 85);
+  --hero-shade: oklch(0.2 0.024 150);
   --gradient-dawn: linear-gradient(135deg, oklch(0.93 0.04 245), oklch(0.92 0.05 300) 50%, oklch(0.93 0.05 355));
   --shadow-soft: 0 20px 50px -25px color-mix(in oklab, var(--primary) 35%, transparent);
   --font-display: "Fraunces", Georgia, serif;
@@ -109,8 +113,17 @@
 
 @layer base {
   body { font-family: var(--font-sans); }
-  h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  h1, h2, h3 { font-family: var(--font-display); letter-spacing: 0; }
 }
+@layer components {
+  .editorial-width { width: min(100% - 3rem, 56rem); margin-inline: auto; }
+  .eyebrow { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted-foreground); }
+  .field { display: block; width: 100%; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 0.75rem 1rem; outline: none; }
+  .field:focus { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .home-garden { height: min(660px, 76svh); min-height: 430px; }
+}
+@media (max-width: 640px) { .home-garden { height: auto; min-height: 0; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 @utility bg-dawn { background-image: var(--gradient-dawn); }
 @utility shadow-soft { box-shadow: var(--shadow-soft); }
 @keyframes breathe { 0%,100% { transform: scale(1); opacity:.7 } 50% { transform: scale(1.08); opacity:1 } }

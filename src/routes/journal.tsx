@@ -10,6 +10,8 @@ export const Route = createFileRoute("/journal")({
       { name: "description", content: "A private journal with an optional feelings check-in." },
       { property: "og:title", content: "Journal — Melineaire" },
       { property: "og:description", content: "Write privately, at your own pace." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Journal,

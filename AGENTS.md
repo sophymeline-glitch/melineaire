@@ -8,3 +8,9 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep public content routes SSR-enabled and account pages under the client-only `_authenticated` layout so browser sessions do not cause refresh redirect loops.
+- Use a single root MemberProvider for identity transitions and cache invalidation; authenticated server functions use the generated bearer middleware and user-scoped client.
+- Store profile information separately from protected user_roles; signup always creates a member role and administrator assignment is privileged, never derived from metadata.
+- Keep roadmap.md as the staged implementation checklist; introduce future destinations only when genuine functionality exists, otherwise label them forthcoming without links.
+- Use shared pageHead for new leaf metadata and global semantic tokens for presentation so the brand stays consistent across stages.

@@ -9,6 +9,8 @@ export const Route = createFileRoute("/reflections")({
       { name: "description", content: "Reflective readings and guided questions from Melineaire." },
       { property: "og:title", content: "Reflections — Melineaire" },
       { property: "og:description", content: "Readings and questions to sit with." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Reflections,
