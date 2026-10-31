@@ -5,7 +5,7 @@ import { mandalaSvg } from "@/lib/lineart";
 import { palettes, reflections } from "@/lib/content";
 
 export const Route = createFileRoute("/studio")({
-  validateSearch: (s: Record<string, unknown>) => ({ r: typeof s.r === "string" ? s.r : undefined }),
+  validateSearch: (s: Record<string, unknown>): { r?: string } => (typeof s.r === "string" ? { r: s.r } : {}),
   head: () => ({
     meta: [
       { title: "Colour Studio — Melineaire" },
