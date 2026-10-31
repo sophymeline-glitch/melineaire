@@ -15,7 +15,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const featured = reflections[0];
+  const featured = reflections[0]!;
   return (
     <div className="min-h-screen">
       <SiteNav />

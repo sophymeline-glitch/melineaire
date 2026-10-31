@@ -5,7 +5,7 @@ import { mandalaSvg } from "@/lib/lineart";
 import { palettes, reflections } from "@/lib/content";
 
 export const Route = createFileRoute("/studio")({
-  validateSearch: (s: Record<string, unknown>): { r?: string } => (typeof s.r === "string" ? { r: s.r } : {}),
+  validateSearch: (s: Record<string, unknown>): { r?: string } => (typeof s["r"] === "string" ? { r: s["r"] as string } : {}),
   head: () => ({
     meta: [
       { title: "Colour Studio — Melineaire" },
@@ -25,7 +25,7 @@ const tools: { id: Tool; label: string }[] = [
 ];
 const SAVE_KEY = "melineaire.artwork";
 
-function hexToRgb(h: string) {
+function hexToRgb(h: string): [number, number, number] {
   const n = parseInt(h.slice(1), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
@@ -40,7 +40,7 @@ function Studio() {
   const redo = useRef<ImageData[]>([]);
   const last = useRef<{ x: number; y: number } | null>(null);
   const [tool, setTool] = useState<Tool>("fill");
-  const [color, setColor] = useState(palettes[4].colors[2]);
+  const [color, setColor] = useState(palettes[4]!.colors[2]!);
   const [size, setSize] = useState(14);
   const [opacity, setOpacity] = useState(1);
   const [zoom, setZoom] = useState(1);
@@ -70,15 +70,15 @@ function Studio() {
   };
 
   const flood = (sx: number, sy: number) => {
-    const c = ctx(); const img = c.getImageData(0, 0, SIZE, SIZE); const d = img.data;
+    const c = ctx(); const img = c.getImageData(0, 0, SIZE, SIZE); const d = img.data as unknown as number[];
     const line = lineData.current; const [cr, cg, cb] = hexToRgb(color);
-    const isWall = (i: number) => !!line && line[i + 3] > 90;
+    const isWall = (i: number) => !!line && line[i + 3]! > 90;
     const start = (sy * SIZE + sx) * 4;
     if (isWall(start)) return;
-    const tr = d[start], tg = d[start + 1], tb = d[start + 2];
+    const tr = d[start]!, tg = d[start + 1]!, tb = d[start + 2]!;
     const nr = Math.round(cr * opacity + tr * (1 - opacity)), ng = Math.round(cg * opacity + tg * (1 - opacity)), nb = Math.round(cb * opacity + tb * (1 - opacity));
     if (Math.abs(tr - nr) + Math.abs(tg - ng) + Math.abs(tb - nb) < 3) return;
-    const match = (i: number) => !isWall(i) && Math.abs(d[i] - tr) + Math.abs(d[i + 1] - tg) + Math.abs(d[i + 2] - tb) < 40;
+    const match = (i: number) => !isWall(i) && Math.abs(d[i]! - tr) + Math.abs(d[i + 1]! - tg) + Math.abs(d[i + 2]! - tb) < 40;
     const stack = [sx, sy]; const seen = new Uint8Array(SIZE * SIZE);
     while (stack.length) {
       const y = stack.pop()!, x = stack.pop()!;
@@ -98,7 +98,7 @@ function Studio() {
 
   const stroke = (a: { x: number; y: number }, b: { x: number; y: number }) => {
     const c = ctx(); c.save();
-    c.globalAlpha = opacity; c.strokeStyle = tool === "eraser" ? "#ffffff" : color; c.fillStyle = c.strokeStyle;
+    c.globalAlpha = opacity; c.strokeStyle = tool === "eraser" ? "#ffffff" : color; c.fillStyle = tool === "eraser" ? "#ffffff" : color;
     c.lineCap = "round"; c.lineJoin = "round";
     if (tool === "spray") {
       const steps = Math.max(1, Math.hypot(b.x - a.x, b.y - a.y) / 4);
