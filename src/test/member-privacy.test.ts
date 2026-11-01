@@ -41,7 +41,8 @@ describe.skipIf(!url || !adminKey || !key)('Member privacy integration', () => {
       const promote = await request('/rest/v1/user_roles', { method: 'POST', headers, body: JSON.stringify({ user_id: owner.id, role: 'admin' }) });
       expect(promote.ok).toBe(false);
       const anonymous = await request('/rest/v1/profiles?select=id', { headers: { apikey: key } });
-      expect(anonymous.ok).toBe(false);
+      if (anonymous.ok) expect(await anonymous.json()).toEqual([]);
+      else expect([401, 403]).toContain(anonymous.status);
     } finally {
       for (const id of ids) await request(`/auth/v1/admin/users/${id}`, { method: 'DELETE', headers: adminHeaders });
     }
