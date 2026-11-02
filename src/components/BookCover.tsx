@@ -1,0 +1,3 @@
+import { BookOpen } from 'lucide-react';
+import type { Book } from '@/lib/books';
+export function BookCover({book}:{book:Book}) { return book.cover_url ? <img src={book.cover_url} alt={`${book.title} cover`} width={600} height={800} loading="lazy" className="aspect-[3/4] w-full rounded-md object-cover shadow-book" /> : <div className="book-cover flex aspect-[3/4] flex-col justify-between rounded-md p-6 text-primary-foreground shadow-book"><BookOpen className="size-8" /><div><p className="font-display text-3xl">{book.title}</p><p className="mt-3 text-sm">{book.creator}</p></div><span className="text-xs">MELINEAIRE</span></div>; }
