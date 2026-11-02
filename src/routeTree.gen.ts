@@ -13,10 +13,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as JournalRouteImport } from './routes/journal'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as ReflectionsRouteImport } from './routes/reflections'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as StudioRouteImport } from './routes/studio'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as LibraryIndexRouteImport } from './routes/library.index'
+import { Route as LibraryBookIdRouteImport } from './routes/library.$bookId'
+import { Route as ReadBookIdSectionIdRouteImport } from './routes/read.$bookId.$sectionId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,6 +39,11 @@ const AuthRoute = AuthRouteImport.update({
 const JournalRoute = JournalRouteImport.update({
   id: '/journal',
   path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReflectionsRoute = ReflectionsRouteImport.update({
@@ -57,15 +66,34 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const LibraryIndexRoute = LibraryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LibraryRoute,
+} as any)
+const LibraryBookIdRoute = LibraryBookIdRouteImport.update({
+  id: '/$bookId',
+  path: '/$bookId',
+  getParentRoute: () => LibraryRoute,
+} as any)
+const ReadBookIdSectionIdRoute = ReadBookIdSectionIdRouteImport.update({
+  id: '/read/$bookId/$sectionId',
+  path: '/read/$bookId/$sectionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/journal': typeof JournalRoute
+  '/library': typeof LibraryRouteWithChildren
   '/reflections': typeof ReflectionsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/studio': typeof StudioRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/library/$bookId': typeof LibraryBookIdRoute
+  '/library/': typeof LibraryIndexRoute
+  '/read/$bookId/$sectionId': typeof ReadBookIdSectionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,6 +103,9 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/studio': typeof StudioRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/library/$bookId': typeof LibraryBookIdRoute
+  '/library': typeof LibraryIndexRoute
+  '/read/$bookId/$sectionId': typeof ReadBookIdSectionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -82,10 +113,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/journal': typeof JournalRoute
+  '/library': typeof LibraryRouteWithChildren
   '/reflections': typeof ReflectionsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/studio': typeof StudioRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/library/$bookId': typeof LibraryBookIdRoute
+  '/library/': typeof LibraryIndexRoute
+  '/read/$bookId/$sectionId': typeof ReadBookIdSectionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -93,10 +128,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/journal'
+    | '/library'
     | '/reflections'
     | '/reset-password'
     | '/studio'
     | '/account'
+    | '/library/$bookId'
+    | '/library/'
+    | '/read/$bookId/$sectionId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,16 +145,23 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/studio'
     | '/account'
+    | '/library/$bookId'
+    | '/library'
+    | '/read/$bookId/$sectionId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/journal'
+    | '/library'
     | '/reflections'
     | '/reset-password'
     | '/studio'
     | '/_authenticated/account'
+    | '/library/$bookId'
+    | '/library/'
+    | '/read/$bookId/$sectionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -123,9 +169,11 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   JournalRoute: typeof JournalRoute
+  LibraryRoute: typeof LibraryRouteWithChildren
   ReflectionsRoute: typeof ReflectionsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   StudioRoute: typeof StudioRoute
+  ReadBookIdSectionIdRoute: typeof ReadBookIdSectionIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -158,6 +206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reflections': {
       id: '/reflections'
       path: '/reflections'
@@ -186,6 +241,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/library/': {
+      id: '/library/'
+      path: '/'
+      fullPath: '/library/'
+      preLoaderRoute: typeof LibraryIndexRouteImport
+      parentRoute: typeof LibraryRoute
+    }
+    '/library/$bookId': {
+      id: '/library/$bookId'
+      path: '/$bookId'
+      fullPath: '/library/$bookId'
+      preLoaderRoute: typeof LibraryBookIdRouteImport
+      parentRoute: typeof LibraryRoute
+    }
+    '/read/$bookId/$sectionId': {
+      id: '/read/$bookId/$sectionId'
+      path: '/read/$bookId/$sectionId'
+      fullPath: '/read/$bookId/$sectionId'
+      preLoaderRoute: typeof ReadBookIdSectionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -200,14 +276,29 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface LibraryRouteChildren {
+  LibraryBookIdRoute: typeof LibraryBookIdRoute
+  LibraryIndexRoute: typeof LibraryIndexRoute
+}
+
+const LibraryRouteChildren: LibraryRouteChildren = {
+  LibraryBookIdRoute: LibraryBookIdRoute,
+  LibraryIndexRoute: LibraryIndexRoute,
+}
+
+const LibraryRouteWithChildren =
+  LibraryRoute._addFileChildren(LibraryRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   JournalRoute: JournalRoute,
+  LibraryRoute: LibraryRouteWithChildren,
   ReflectionsRoute: ReflectionsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   StudioRoute: StudioRoute,
+  ReadBookIdSectionIdRoute: ReadBookIdSectionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
