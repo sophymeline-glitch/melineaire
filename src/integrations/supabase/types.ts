@@ -14,6 +14,133 @@ export type Database = {
   }
   public: {
     Tables: {
+      book_files: {
+        Row: {
+          book_id: string
+          pdf_path: string | null
+        }
+        Insert: {
+          book_id: string
+          pdf_path?: string | null
+        }
+        Update: {
+          book_id?: string
+          pdf_path?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_files_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: true
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      book_sections: {
+        Row: {
+          atmosphere_path: string | null
+          audio_path: string | null
+          book_id: string
+          id: string
+          illustration_path: string | null
+          journal_prompt: string
+          questions: string[]
+          reflection: string
+          scripture: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          atmosphere_path?: string | null
+          audio_path?: string | null
+          book_id: string
+          id?: string
+          illustration_path?: string | null
+          journal_prompt?: string
+          questions?: string[]
+          reflection?: string
+          scripture?: string
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          atmosphere_path?: string | null
+          audio_path?: string | null
+          book_id?: string
+          id?: string
+          illustration_path?: string | null
+          journal_prompt?: string
+          questions?: string[]
+          reflection?: string
+          scripture?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_sections_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      books: {
+        Row: {
+          access: string
+          categories: string[]
+          cover_path: string | null
+          created_at: string
+          creator: string
+          description: string
+          featured: boolean
+          id: string
+          page_count: number | null
+          preview_paths: string[]
+          sort_order: number
+          status: string
+          subtitle: string
+          themes: string[]
+          title: string
+        }
+        Insert: {
+          access?: string
+          categories?: string[]
+          cover_path?: string | null
+          created_at?: string
+          creator?: string
+          description?: string
+          featured?: boolean
+          id?: string
+          page_count?: number | null
+          preview_paths?: string[]
+          sort_order?: number
+          status?: string
+          subtitle?: string
+          themes?: string[]
+          title: string
+        }
+        Update: {
+          access?: string
+          categories?: string[]
+          cover_path?: string | null
+          created_at?: string
+          creator?: string
+          description?: string
+          featured?: boolean
+          id?: string
+          page_count?: number | null
+          preview_paths?: string[]
+          sort_order?: number
+          status?: string
+          subtitle?: string
+          themes?: string[]
+          title?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -68,6 +195,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      save_publication: { Args: { payload: Json }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "member"

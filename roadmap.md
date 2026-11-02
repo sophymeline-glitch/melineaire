@@ -1,5 +1,13 @@
 # Melineaire roadmap
 
+## Current redesign brief
+- [ ] Apply vibrant shared colours, distinctive logo and vertical editorial redesign to all working pages.
+- [ ] Add a real searchable Library, book detail/reader and connected reflection-to-colouring experience.
+- [ ] Add secure Manage Books with drafts, publishing, uploads and manual section editing.
+- [ ] Add searchable Help & Support and replayable in-studio help.
+- [ ] Verify navigation, mobile/tablet/desktop, publishing and private/paid access restrictions.
+- [ ] Extend administration and experiences for prayers, Bible, atmospheres and products after those destinations are implemented; do not present mock-ups as functioning.
+
 - [x] Stage 1 foundation: Refined vertical home, compact navigation, member profiles, sign-in/sign-out and protected administrator role structure. Profile saving and owner-only access tested.
 - [ ] Stage 1 owner setup: Assign the first administrator after the owner creates an account and identifies it. No administrator has been assigned.
 - [ ] Stage 2: Reflection publishing, responsive colouring, colour mixing, saved colours and tutorials.
