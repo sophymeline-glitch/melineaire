@@ -15,6 +15,13 @@
       "when": 1793549752668,
       "tag": "0001_restrict_member_function_access",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793611973844,
+      "tag": "0002_melineaire_publications",
+      "breakpoints": true
     }
   ]
 }
