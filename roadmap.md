@@ -1,11 +1,11 @@
 # Melineaire roadmap
 
 ## Current redesign brief
-- [ ] Apply vibrant shared colours, distinctive logo and vertical editorial redesign to all working pages.
-- [ ] Add a real searchable Library, book detail/reader and connected reflection-to-colouring experience.
-- [ ] Add secure Manage Books with drafts, publishing, uploads and manual section editing.
-- [ ] Add searchable Help & Support and replayable in-studio help.
-- [ ] Verify navigation, mobile/tablet/desktop, publishing and private/paid access restrictions.
+- [x] Apply vibrant shared colours, distinctive logo and vertical editorial redesign to all working pages.
+- [x] Add a real searchable Library, book detail/reader and connected reflection-to-colouring experience.
+- [x] Add secure Manage Books with drafts, publishing, uploads and manual section editing.
+- [x] Add searchable Help & Support and replayable in-studio help.
+- [x] Verify navigation, mobile/tablet/desktop, publishing and private/paid access restrictions.
 - [ ] Extend administration and experiences for prayers, Bible, atmospheres and products after those destinations are implemented; do not present mock-ups as functioning.
 
 - [x] Stage 1 foundation: Refined vertical home, compact navigation, member profiles, sign-in/sign-out and protected administrator role structure. Profile saving and owner-only access tested.
@@ -20,3 +20,6 @@
 Implement one reliable stage at a time; no inactive feature may masquerade as working.
 
 Remaining feature stages require future implementation, not external service setup. Journal and artwork remain device-local until Stage 5 migration. Reflections still contain labelled placeholders. Confirmation-email delivery, social sign-in round trips and password-recovery delivery are not yet tested.
+Redesign verification: 8 tests passed, including live draft/paid-content restrictions and profile isolation. Temporary administrator verified cover and illustration upload, draft save, preview, publish, Library discovery, reading, colouring and device save; test data removed. Public pages checked at 390px, 768px and 1280px with no horizontal overflow or browser errors.
+
+Still pending: owner administrator assignment (needs confirmation of account); original books/reflections/prayers (needs owner content); real support contact (needs owner contact); payments and paid entitlements (needs payment setup). Bible, Prayer Corner, standalone Atmosphere, Creative Garden, product catalogue and their administration remain unimplemented, not service blockers. Journals, colours and artwork remain browser-local. Help explicitly describes these limitations.

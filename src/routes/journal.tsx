@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { SiteNav } from "@/components/SiteNav";
 import { feelings } from "@/lib/content";
 
@@ -57,37 +58,37 @@ function Journal() {
       <main className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1.2fr_1fr]">
         <section>
           <h1 className="text-5xl text-primary">Journal</h1>
-          <p className="mt-3 text-sm text-muted-foreground">Private to this device. Nothing is shared.</p>
-          <div className="mt-8 space-y-4 rounded-3xl border border-border bg-card p-6">
+          <p className="mt-3 text-sm text-muted-foreground">Saved in this browser only, not your account. Avoid sensitive writing on shared devices.</p>
+          <div className="mt-8 space-y-4 rounded-lg border border-border bg-card p-6">
             <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title (optional)" className="w-full bg-transparent font-display text-2xl outline-none" />
-            <textarea value={text} onChange={(e) => setText(e.target.value)} rows={8} placeholder="What are you noticing?" className="w-full resize-y rounded-xl bg-muted p-4 outline-none focus:ring-2 focus:ring-ring" />
+            <textarea value={text} onChange={(e) => setText(e.target.value)} rows={8} placeholder="What are you noticing?" className="w-full resize-y rounded-md bg-muted p-4 outline-none focus:ring-2 focus:ring-ring" />
             <div>
               <p className="text-sm text-muted-foreground">How are you feeling? <span className="italic">(optional — skip anytime)</span></p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {feelings.map((f) => (
-                  <button key={f} onClick={() => setPicked((p) => (p.includes(f) ? p.filter((x) => x !== f) : [...p, f]))}
+                  <Button key={f} onClick={() => setPicked((p) => (p.includes(f) ? p.filter((x) => x !== f) : [...p, f]))}
                     className={`rounded-full border px-3 py-1 text-sm ${picked.includes(f) ? "border-primary bg-primary text-primary-foreground" : "border-border hover:bg-secondary"}`}>
                     {f}
-                  </button>
+                  </Button>
                 ))}
                 <input value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="other…" className="w-28 rounded-full border border-border bg-transparent px-3 py-1 text-sm outline-none" />
               </div>
             </div>
             <div className="flex gap-3">
-              <button onClick={save} className="rounded-full bg-primary px-6 py-2 text-primary-foreground">{editing ? "Update" : "Save entry"}</button>
-              {editing && <button onClick={() => { setEditing(null); setTitle(""); setText(""); setPicked([]); }} className="text-sm text-muted-foreground">Cancel</button>}
+              <Button onClick={save} className="rounded-full bg-primary px-6 py-2 text-primary-foreground">{editing ? "Update" : "Save entry"}</Button>
+              {editing && <Button onClick={() => { setEditing(null); setTitle(""); setText(""); setPicked([]); }} className="text-sm text-muted-foreground">Cancel</Button>}
             </div>
           </div>
         </section>
         <section>
           <div className="flex gap-2">
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search entries" className="flex-1 rounded-full border border-border bg-card px-4 py-2 outline-none" />
-            <button onClick={exportAll} disabled={!entries.length} className="rounded-full border border-border px-4 text-sm disabled:opacity-40">Export</button>
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search entries" className="min-w-0 flex-1 rounded-md border border-border bg-card px-4 py-2 outline-none" />
+            <Button onClick={exportAll} disabled={!entries.length} className="rounded-full border border-border px-4 text-sm disabled:opacity-40">Export</Button>
           </div>
           <div className="mt-6 space-y-4">
             {!shown.length && <p className="text-muted-foreground">No entries yet.</p>}
             {shown.map((e) => (
-              <article key={e.id} className="rounded-2xl bg-secondary/60 p-5">
+              <article key={e.id} className="rounded-lg bg-secondary/60 p-5">
                 <div className="flex items-baseline justify-between gap-2">
                   <h3 className="text-xl text-secondary-foreground">{e.title}</h3>
                   <time className="text-xs text-muted-foreground">{new Date(e.date).toLocaleDateString()}</time>
@@ -95,8 +96,8 @@ function Journal() {
                 <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-sm">{e.text}</p>
                 {!!e.feelings.length && <p className="mt-2 text-xs italic text-accent-foreground">{e.feelings.join(" · ")}</p>}
                 <div className="mt-3 flex gap-4 text-xs">
-                  <button onClick={() => { setEditing(e.id); setTitle(e.title); setText(e.text); setPicked(e.feelings); }} className="underline">Edit</button>
-                  <button onClick={() => confirm("Delete this entry?") && persist(entries.filter((x) => x.id !== e.id))} className="text-destructive underline">Delete</button>
+                  <Button onClick={() => { setEditing(e.id); setTitle(e.title); setText(e.text); setPicked(e.feelings); }} className="underline">Edit</Button>
+                  <Button onClick={() => confirm("Delete this entry?") && persist(entries.filter((x) => x.id !== e.id))} className="text-destructive underline">Delete</Button>
                 </div>
               </article>
             ))}

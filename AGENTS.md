@@ -14,3 +14,7 @@
 - Store profile information separately from protected user_roles; signup always creates a member role and administrator assignment is privileged, never derived from metadata.
 - Keep roadmap.md as the staged implementation checklist; introduce future destinations only when genuine functionality exists, otherwise label them forthcoming without links.
 - Use shared pageHead for new leaf metadata and global semantic tokens for presentation so the brand stays consistent across stages.
+
+- Store publication metadata, restricted sections and original files separately; published metadata is public while drafts and paid contents stay RLS-gated, so paid listings never leak reading assets.
+- Save books and sections transactionally through an admin-checked database function; secure uploads use a private bucket and signed access, because drafts must not expose file URLs.
+- Keep book reading and artwork device-local with per-book and per-section keys until account-private progress is implemented, so chapters never overwrite each other.

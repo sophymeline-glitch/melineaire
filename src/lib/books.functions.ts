@@ -11,12 +11,12 @@ async function readBooks(client: SupabaseClient<Database>, id?: string, admin = 
  if (id) query = query.eq('id',id);
  const { data, error } = await query;
  if(error) throw new Error('The Library could not be loaded. Please try again.');
- const sign = async (p: string | null) => { if(!p) return undefined; const { data }=await client.storage.from('book-media').createSignedUrl(p,1800); return data?.signedUrl?.replace(process.env['SUPABASE_URL'] ?? '', import.meta.env.VITE_SUPABASE_URL); };
+ const sign = async (p: string | null) => { if(!p) return undefined; const { data }=await client.storage.from('book-media').createSignedUrl(p,1800); return data?.signedUrl?.replace(process.env['SUPABASE_URL'] ?? '', import.meta.env['VITE_SUPABASE_URL']); };
  return Promise.all((data ?? []).map(async b => {
   const {data: sections,error: sectionError}=await client.from('book_sections').select('*').eq('book_id',b.id).order('sort_order');
   const {data: files}=await client.from('book_files').select('pdf_path').eq('book_id',b.id).maybeSingle();
   if(sectionError) throw new Error('Book contents could not be loaded.');
-  return {...b, pdf_path: files?.pdf_path ?? null, cover_url:await sign(b.cover_path), preview_urls:(await Promise.all(b.preview_paths.map(sign))).filter((u): u is string => Boolean(u)), pdf_url:await sign(files?.pdf_path ?? null), sections: await Promise.all((sections ?? []).map(async s=>({...s,illustration_url:await sign(s.illustration_path),audio_url:await sign(s.audio_path),atmosphere_url:await sign(s.atmosphere_path)}))) };
+  return {...b, access: b.access === 'paid' ? 'paid' as const : 'free' as const, status: b.status === 'published' ? 'published' as const : 'draft' as const, pdf_path: files?.pdf_path ?? null, cover_url:await sign(b.cover_path), preview_urls:(await Promise.all(b.preview_paths.map(sign))).filter((u): u is string => Boolean(u)), pdf_url:await sign(files?.pdf_path ?? null), sections: await Promise.all((sections ?? []).map(async s=>({...s,illustration_url:await sign(s.illustration_path),audio_url:await sign(s.audio_path),atmosphere_url:await sign(s.atmosphere_path)}))) };
  }));
 }
 export const getBooks = createServerFn({method:'GET'}).inputValidator((input: {id?: string} = {})=>z.object({id:z.string().uuid().optional()}).parse(input)).handler(async ({data})=>{

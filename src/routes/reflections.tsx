@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 import { SiteNav } from "@/components/SiteNav";
 import { reflections } from "@/lib/content";
 
@@ -25,15 +26,15 @@ function Reflections() {
         <p className="mt-3 text-muted-foreground">Read slowly. Take what helps, leave what doesn't.</p>
         <div className="mt-12 space-y-8">
           {reflections.map((r) => (
-            <article key={r.slug} className="rounded-3xl border border-border bg-card p-8">
+            <article key={r.slug} className="rounded-lg border border-border bg-card p-8">
               <h2 className="text-3xl text-primary">{r.title}</h2>
               <p className="mt-4 leading-relaxed text-foreground/80">{r.body}</p>
               <ul className="mt-6 space-y-2 border-l-2 border-sakura pl-4 italic text-secondary-foreground">
                 {r.questions.map((q) => <li key={q}>{q}</li>)}
               </ul>
-              <div className="mt-6 flex gap-3 text-sm">
-                <Link to="/studio" search={{ r: r.slug }} className="rounded-full bg-primary px-4 py-2 text-primary-foreground">Colour with this</Link>
-                <Link to="/journal" className="rounded-full border border-border px-4 py-2">Write about it</Link>
+              <div className="mt-6 flex flex-wrap gap-3 text-sm">
+                <Button asChild><Link to="/studio" search={{ r: r.slug }}>Start colouring</Link></Button>
+                <Button asChild variant="outline"><Link to="/journal">Write about it</Link></Button>
               </div>
             </article>
           ))}
