@@ -46,6 +46,7 @@ function Studio() {
   const reflection = section ? {title:section.title,body:section.reflection,questions:section.questions} : reflections.find((x) => x.slug === r);
   const saveKey = artworkKey(b,sectionId);
   const [saveMessage,setSaveMessage]=useState('');
+  const [illustrationReady,setIllustrationReady]=useState(false);
   const [savedColors,setSavedColors]=useState<string[]>([]);
   const [mixA,setMixA]=useState('#8050f5'); const [mixB,setMixB]=useState('#62c8ff'); const [mixRatio,setMixRatio]=useState(50);
   const mixture='#'+hexToRgb(mixA).map((v,i)=>Math.round(v*(1-mixRatio/100)+(hexToRgb(mixB)[i] ?? 0)*mixRatio/100).toString(16).padStart(2,'0')).join('');
@@ -72,8 +73,8 @@ function Studio() {
     let active=true;
     const c=ctx(); const img=new Image(); img.crossOrigin='anonymous';
     c.fillStyle='#ffffff';c.fillRect(0,0,SIZE,SIZE);l.clearRect(0,0,SIZE,SIZE);
-    undo.current=[];redo.current=[];lineData.current=null;
-    img.onload=()=>{if(!active)return;l.drawImage(img,0,0,SIZE,SIZE);const image=l.getImageData(0,0,SIZE,SIZE);if(section){for(let i=0;i<image.data.length;i+=4){const light=Math.min(image.data[i] ?? 255,image.data[i+1] ?? 255,image.data[i+2] ?? 255);image.data[i+3]=Math.round((image.data[i+3] ?? 255)*(1-light/255));}l.putImageData(image,0,0);}lineData.current=l.getImageData(0,0,SIZE,SIZE).data;};
+    undo.current=[];redo.current=[];lineData.current=null;setIllustrationReady(false);
+    img.onload=()=>{if(!active)return;l.drawImage(img,0,0,SIZE,SIZE);const image=l.getImageData(0,0,SIZE,SIZE);if(section){for(let i=0;i<image.data.length;i+=4){const light=Math.min(image.data[i] ?? 255,image.data[i+1] ?? 255,image.data[i+2] ?? 255);image.data[i+3]=Math.round((image.data[i+3] ?? 255)*(1-light/255));}l.putImageData(image,0,0);}lineData.current=l.getImageData(0,0,SIZE,SIZE).data;setIllustrationReady(true);};
     img.onerror=()=>setSaveMessage('The illustration could not be loaded. Return to the book and try again.');
     img.src=section?.illustration_url ?? 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(mandalaSvg(SIZE));
     try{const saved=localStorage.getItem(saveKey);if(saved){const image=new Image();image.onload=()=>{if(active)c.drawImage(image,0,0);};image.src=saved;}}catch{setSaveMessage('Device storage is unavailable. Export your artwork to keep it.');}
@@ -144,6 +145,7 @@ function Studio() {
   };
 
   const down = (e: React.PointerEvent) => {
+    if(!illustrationReady)return;
     const p = pos(e); snapshot();
     if (tool === "fill") { flood(p.x, p.y); return; }
     (e.target as Element).setPointerCapture(e.pointerId);
@@ -184,7 +186,7 @@ function Studio() {
     <div className="min-h-screen">
       <SiteNav />
       <main className="mx-auto grid max-w-7xl gap-6 px-4 py-8 lg:grid-cols-[250px_1fr]">
-        <aside className="space-y-6 rounded-lg border border-border bg-card p-5 lg:sticky lg:top-24 lg:self-start">
+        <aside className="order-2 lg:order-1 space-y-6 rounded-lg border border-border bg-card p-5 lg:sticky lg:top-24 lg:self-start">
           <div>
             <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Tools</p>
             <div className="grid grid-cols-3 gap-2">
@@ -217,8 +219,8 @@ function Studio() {
           </div>
         </aside>
 
-        <section className="min-w-0">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><h1 className="text-3xl">Colour Studio</h1><StudioHelp/></div>{b&&section&&<Button asChild variant="link" className="mb-4 px-0"><Link to="/read/$bookId/$sectionId" params={{bookId:b,sectionId:section.id}}>Return to reflection & next section</Link></Button>}<p role="status" className="mb-3 text-sm text-primary">{saveMessage}</p><div className="mb-4 flex flex-wrap items-center gap-2">
+        <section className="order-1 lg:order-2 min-w-0">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><h1 className="text-3xl">Colour Studio</h1><StudioHelp/></div>{b&&section&&<Button asChild variant="link" className="mb-4 px-0"><Link to="/read/$bookId/$sectionId" params={{bookId:b,sectionId:section.id}}>Return to reflection & next section</Link></Button>}<p role="status" className="mb-3 text-sm text-primary">{saveMessage || (!illustrationReady ? "Loading illustration…" : "")}</p><div className="mb-4 flex flex-wrap items-center gap-2">
             <Button className={btn} onClick={doUndo} aria-label="Undo" title="Undo" size="icon" variant="outline" disabled={!undo.current.length}><Undo2/></Button>
             <Button className={btn} onClick={doRedo} aria-label="Redo" title="Redo" size="icon" variant="outline" disabled={!redo.current.length}><Redo2/></Button>
             <Button className={btn} onClick={() => setZoom((z) => Math.max(1, z - 0.25))} aria-label="Zoom out" title="Zoom out" size="icon" variant="outline"><ZoomOut/></Button>

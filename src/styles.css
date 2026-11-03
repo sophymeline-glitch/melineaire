@@ -146,3 +146,5 @@
  .shadow-book { box-shadow: var(--shadow-book); }
  .hero-copy { text-shadow: 0 2px 12px color-mix(in oklab, var(--hero-shade) 35%, transparent); }
 }
+
+@media (max-width: 640px) { .home-garden > div.absolute { background: color-mix(in oklab, var(--hero-shade) 48%, transparent); } }
