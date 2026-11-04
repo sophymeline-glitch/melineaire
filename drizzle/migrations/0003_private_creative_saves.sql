@@ -1,0 +1,10 @@
+CREATE TABLE public.artwork_saves (user_id uuid NOT NULL, artwork_key text NOT NULL, progress_png text NOT NULL, completed_png text, updated_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(user_id,artwork_key), CONSTRAINT artwork_progress_size CHECK (length(progress_png) <= 8000000), CONSTRAINT artwork_completed_size CHECK (length(completed_png) <= 8000000));
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.artwork_saves TO authenticated;
+GRANT ALL ON public.artwork_saves TO service_role;
+ALTER TABLE public.artwork_saves ENABLE ROW LEVEL SECURITY;
+CREATE POLICY artwork_owner ON public.artwork_saves FOR ALL TO authenticated USING (auth.uid()=user_id) WITH CHECK (auth.uid()=user_id);
+CREATE TABLE public.journal_entries (id uuid NOT NULL, user_id uuid NOT NULL, date timestamptz NOT NULL DEFAULT now(), title text NOT NULL DEFAULT '', text text NOT NULL DEFAULT '', feelings text[] NOT NULL DEFAULT '{}', PRIMARY KEY(user_id,id));
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.journal_entries TO authenticated;
+GRANT ALL ON public.journal_entries TO service_role;
+ALTER TABLE public.journal_entries ENABLE ROW LEVEL SECURITY;
+CREATE POLICY journal_owner ON public.journal_entries FOR ALL TO authenticated USING (auth.uid()=user_id) WITH CHECK (auth.uid()=user_id);
