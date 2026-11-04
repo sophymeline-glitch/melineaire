@@ -17,4 +17,4 @@
 
 - Store publication metadata, restricted sections and original files separately; published metadata is public while drafts and paid contents stay RLS-gated, so paid listings never leak reading assets.
 - Save books and sections transactionally through an admin-checked database function; secure uploads use a private bucket and signed access, because drafts must not expose file URLs.
-- Keep book reading and artwork device-local with per-book and per-section keys until account-private progress is implemented, so chapters never overwrite each other.
+- Keep reading position device-local; signed-in artwork and journal records use owner-scoped RLS and user-scoped browser clients, while guest saves remain explicitly local. Artwork keys separate each book and section, and identity changes reset private views to prevent cross-account exposure.
