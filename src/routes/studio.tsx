@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { StudioHelp } from '@/components/StudioHelp';
 import { booksOptions } from '@/lib/book-query';
+import { useMember } from '@/components/MemberProvider';
+import { readArtwork, storeArtwork } from '@/lib/private-saves';
 import { artworkKey } from '@/lib/books';
 import { Undo2, Redo2, ZoomIn, ZoomOut, Save, Download, Trash2, PaintBucket, Pencil, Paintbrush, SprayCan, Eraser, Highlighter } from 'lucide-react';
 import { SiteNav } from "@/components/SiteNav";
@@ -39,6 +41,8 @@ function hexToRgb(h: string): [number, number, number] {
 }
 
 function Studio() {
+  const {user,loading:memberLoading}=useMember();
+  const [saving,setSaving]=useState(false);
   const { r, b, s: sectionId } = Route.useSearch();
   const {data: bookData} = useQuery({...booksOptions(b), enabled: Boolean(b)});
   const book = bookData?.[0];
@@ -68,7 +72,7 @@ function Studio() {
   const ctx = () => { const c=colorRef.current?.getContext('2d',{willReadFrequently:true}); if(!c) throw new Error('Colour canvas unavailable'); return c; };
 
   useEffect(() => {
-    if(b && !section) return;
+    if(memberLoading || (b && !section)) return;
     const l=lineRef.current?.getContext('2d'); if(!l) return;
     let active=true;
     const c=ctx(); const img=new Image(); img.crossOrigin='anonymous';
@@ -77,9 +81,11 @@ function Studio() {
     img.onload=()=>{if(!active)return;l.drawImage(img,0,0,SIZE,SIZE);const image=l.getImageData(0,0,SIZE,SIZE);if(section){for(let i=0;i<image.data.length;i+=4){const light=Math.min(image.data[i] ?? 255,image.data[i+1] ?? 255,image.data[i+2] ?? 255);image.data[i+3]=Math.round((image.data[i+3] ?? 255)*(1-light/255));}l.putImageData(image,0,0);}lineData.current=l.getImageData(0,0,SIZE,SIZE).data;setIllustrationReady(true);};
     img.onerror=()=>setSaveMessage('The illustration could not be loaded. Return to the book and try again.');
     img.src=section?.illustration_url ?? 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(mandalaSvg(SIZE));
-    try{const saved=localStorage.getItem(saveKey);if(saved){const image=new Image();image.onload=()=>{if(active)c.drawImage(image,0,0);};image.src=saved;}}catch{setSaveMessage('Device storage is unavailable. Export your artwork to keep it.');}
+    setSaving(true);
+    const restore=async()=>{try{const saved=user?(await readArtwork(user.id,saveKey))?.progress_png:localStorage.getItem(saveKey);if(!active)return;if(saved){await new Promise<void>((resolve,reject)=>{const image=new Image();image.onload=()=>{if(active)c.drawImage(image,0,0);resolve();};image.onerror=()=>reject(new Error('Saved artwork could not be restored.'));image.src=saved;});}setSaveMessage('');}catch{if(active){setIllustrationReady(false);setSaveMessage('Saved artwork could not be loaded. Reload before colouring.');}}finally{if(active)setSaving(false);}};
+    void restore();
     return()=>{active=false;};
-  }, [b, section, saveKey]);
+  }, [b, section, saveKey, user?.id, memberLoading]);
 
   const snapshot = () => {
     undo.current.push(ctx().getImageData(0, 0, SIZE, SIZE));
@@ -145,7 +151,7 @@ function Studio() {
   };
 
   const down = (e: React.PointerEvent) => {
-    if(!illustrationReady)return;
+    if(!illustrationReady||saving)return;
     const p = pos(e); snapshot();
     if (tool === "fill") { flood(p.x, p.y); return; }
     (e.target as Element).setPointerCapture(e.pointerId);
@@ -175,7 +181,7 @@ function Studio() {
     const o = out.getContext("2d"); if(!o || !colorRef.current || !lineRef.current) return out; o.drawImage(colorRef.current, 0, 0); o.drawImage(lineRef.current, 0, 0);
     return out;
   };
-  const save = () => { if(!colorRef.current)return;try{localStorage.setItem(saveKey,colorRef.current.toDataURL());setSaveMessage('Saved on this device.');}catch{setSaveMessage('Could not save. Export your image to keep a copy.');} };
+  const save = async (completed=false) => { if(!colorRef.current || saving || !illustrationReady)return;setSaving(true);try{const progress=colorRef.current.toDataURL();if(user){await storeArtwork(user.id,saveKey,progress,completed?composite().toDataURL():undefined);const verified=await readArtwork(user.id,saveKey);if(verified?.progress_png!==progress)throw new Error('Not verified');setSaveMessage(completed?'Completed artwork saved privately to your account.':'Progress saved privately to your account.');}else{localStorage.setItem(saveKey,progress);setSaveMessage('Saved on this device only. Sign in for private account saving.');}}catch{setSaveMessage('Could not save. Export your image to keep a copy.');}finally{setSaving(false);} };
   const exportPng = () => {
     const a = document.createElement("a"); a.href = composite().toDataURL("image/png"); a.download = "melineaire-artwork.png"; a.click();
   };
@@ -228,7 +234,7 @@ function Studio() {
             <Button className={btn} onClick={() => setZoom((z) => Math.min(3, z + 0.25))} aria-label="Zoom in" title="Zoom in" size="icon" variant="outline"><ZoomIn/></Button>
             <Button className={btn} onClick={clear} aria-label="Clear colour" title="Clear colour" size="icon" variant="outline"><Trash2/></Button>
             <span className="flex-1" />
-            <Button className={btn} onClick={save} variant="outline"><Save/>Save</Button>
+            <Button className={btn} disabled={saving||!illustrationReady} onClick={()=>void save()} variant="outline"><Save/>{user?"Save progress":"Save"}</Button>{user&&<Button disabled={saving||!illustrationReady} variant="outline" onClick={()=>void save(true)}>Save completed artwork</Button>}
             <Button className="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground" onClick={exportPng}><Download/>Export image</Button>
           </div>
           <div className="relative overflow-auto rounded-lg border border-border bg-muted p-3 shadow-soft" style={{ maxHeight: "80vh" }}>

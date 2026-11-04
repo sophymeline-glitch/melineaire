@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      artwork_saves: {
+        Row: {
+          artwork_key: string
+          completed_png: string | null
+          progress_png: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          artwork_key: string
+          completed_png?: string | null
+          progress_png: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          artwork_key?: string
+          completed_png?: string | null
+          progress_png?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       book_files: {
         Row: {
           book_id: string
@@ -138,6 +162,33 @@ export type Database = {
           subtitle?: string
           themes?: string[]
           title?: string
+        }
+        Relationships: []
+      }
+      journal_entries: {
+        Row: {
+          date: string
+          feelings: string[]
+          id: string
+          text: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          date?: string
+          feelings?: string[]
+          id: string
+          text?: string
+          title?: string
+          user_id: string
+        }
+        Update: {
+          date?: string
+          feelings?: string[]
+          id?: string
+          text?: string
+          title?: string
+          user_id?: string
         }
         Relationships: []
       }

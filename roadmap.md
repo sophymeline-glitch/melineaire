@@ -1,5 +1,11 @@
 # Melineaire roadmap
 
+## First book preparation
+- [ ] Prepare the named first-book draft and existing admin upload controls, without invented content.
+- [ ] Add private account artwork/progress and journal saves; connect book prompts.
+- [ ] Provide clear Open Book and permitted PDF download; verify persisted files and privacy.
+- [ ] Enable the owner's administrator access if the identified account exists.
+
 ## Current redesign brief
 - [x] Apply vibrant shared colours, distinctive logo and vertical editorial redesign to all working pages.
 - [x] Add a real searchable Library, book detail/reader and connected reflection-to-colouring experience.
