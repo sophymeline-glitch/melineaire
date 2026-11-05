@@ -1,10 +1,13 @@
 # Melineaire roadmap
 
 ## First book preparation
-- [ ] Prepare the named first-book draft and existing admin upload controls, without invented content.
-- [ ] Add private account artwork/progress and journal saves; connect book prompts.
-- [ ] Provide clear Open Book and permitted PDF download; verify persisted files and privacy.
-- [ ] Enable the owner's administrator access if the identified account exists.
+- [x] Prepare the named first-book draft and existing admin upload controls, without invented content.
+- [x] Add private account artwork/progress and journal saves; connect book prompts.
+- [x] Provide clear Open Book and permitted PDF download; verify persisted files and privacy.
+- [x] Enable the owner's administrator access for the identified account.
+- [ ] Add the owner's actual cover, description, PDF and reflections; waiting for supplied content.
+
+First-book verification: 10 tests passed. Owner administrator draft view, account artwork save/reload, journal save/reload/delete, and public draft exclusion checked. Real temporary PDF upload retrieved successfully; downloaded bytes matched the original; temporary book/files removed. No real book content has been uploaded or invented.
 
 ## Current redesign brief
 - [x] Apply vibrant shared colours, distinctive logo and vertical editorial redesign to all working pages.
@@ -15,7 +18,7 @@
 - [ ] Extend administration and experiences for prayers, Bible, atmospheres and products after those destinations are implemented; do not present mock-ups as functioning.
 
 - [x] Stage 1 foundation: Refined vertical home, compact navigation, member profiles, sign-in/sign-out and protected administrator role structure. Profile saving and owner-only access tested.
-- [ ] Stage 1 owner setup: Assign the first administrator after the owner creates an account and identifies it. No administrator has been assigned.
+- [x] Stage 1 owner setup: Administrator access assigned to the owner's identified account and verified.
 - [ ] Stage 2: Reflection publishing, responsive colouring, colour mixing, saved colours and tutorials.
 - [ ] Stage 3: Media management, real audio playback, visual atmospheres and favourites.
 - [ ] Stage 4: Licensed Bible reading, notes and bookmarks; published and private prayers.
@@ -25,7 +28,7 @@
 
 Implement one reliable stage at a time; no inactive feature may masquerade as working.
 
-Remaining feature stages require future implementation, not external service setup. Journal and artwork remain device-local until Stage 5 migration. Reflections still contain labelled placeholders. Confirmation-email delivery, social sign-in round trips and password-recovery delivery are not yet tested.
+Remaining feature stages require future implementation, not external service setup. Signed-in artwork and journals now save privately to accounts; guest saves and saved colours remain device-local. Creative Garden remains unfinished. Reflections still contain labelled placeholders. Confirmation-email delivery, social sign-in round trips and password-recovery delivery are not yet tested.
 Redesign verification: 8 tests passed, including live draft/paid-content restrictions and profile isolation. Temporary administrator verified cover and illustration upload, draft save, preview, publish, Library discovery, reading, colouring and device save; test data removed. Public pages checked at 390px, 768px and 1280px with no horizontal overflow or browser errors.
 
-Still pending: owner administrator assignment (needs confirmation of account); original books/reflections/prayers (needs owner content); real support contact (needs owner contact); payments and paid entitlements (needs payment setup). Bible, Prayer Corner, standalone Atmosphere, Creative Garden, product catalogue and their administration remain unimplemented, not service blockers. Journals, colours and artwork remain browser-local. Help explicitly describes these limitations.
+Still pending: original books/reflections/prayers (needs owner content); real support contact (needs owner contact); payments and paid entitlements (needs payment setup). Bible, Prayer Corner, standalone Atmosphere, Creative Garden, product catalogue and their administration remain unimplemented, not service blockers. Guest journals/artwork and saved colours remain browser-local. Help describes these limitations.
