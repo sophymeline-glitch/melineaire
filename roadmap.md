@@ -1,6 +1,9 @@
 # Melineaire roadmap
 
 ## First book preparation
+- [ ] Distinguish original PDF from interactive reading in the existing listing; inspect and report before implementation.
+- [ ] Add sections containing individual reflections, linked illustrations/prompts, ordering and interactive draft preview.
+- [ ] Add owner-private cross-device reading position and reflection-linked writing resume; verify persistence and access.
 - [x] Prepare the named first-book draft and existing admin upload controls, without invented content.
 - [x] Add private account artwork/progress and journal saves; connect book prompts.
 - [x] Provide clear Open Book and permitted PDF download; verify persisted files and privacy.
