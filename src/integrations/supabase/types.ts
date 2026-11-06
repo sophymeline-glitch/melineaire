@@ -61,44 +61,74 @@ export type Database = {
           },
         ]
       }
+      book_progress: {
+        Row: {
+          book_id: string
+          section_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          section_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          section_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       book_sections: {
         Row: {
           atmosphere_path: string | null
           audio_path: string | null
           book_id: string
+          group_title: string
           id: string
           illustration_path: string | null
           journal_prompt: string
           questions: string[]
           reflection: string
+          review_note: string
           scripture: string
           sort_order: number
+          source_page: number | null
           title: string
         }
         Insert: {
           atmosphere_path?: string | null
           audio_path?: string | null
           book_id: string
+          group_title?: string
           id?: string
           illustration_path?: string | null
           journal_prompt?: string
           questions?: string[]
           reflection?: string
+          review_note?: string
           scripture?: string
           sort_order?: number
+          source_page?: number | null
           title: string
         }
         Update: {
           atmosphere_path?: string | null
           audio_path?: string | null
           book_id?: string
+          group_title?: string
           id?: string
           illustration_path?: string | null
           journal_prompt?: string
           questions?: string[]
           reflection?: string
+          review_note?: string
           scripture?: string
           sort_order?: number
+          source_page?: number | null
           title?: string
         }
         Relationships: [
@@ -213,6 +243,30 @@ export type Database = {
           display_name?: string
           id?: string
           preferences?: Json
+        }
+        Relationships: []
+      }
+      reflection_notes: {
+        Row: {
+          book_id: string
+          section_id: string
+          text: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          section_id: string
+          text?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          section_id?: string
+          text?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
